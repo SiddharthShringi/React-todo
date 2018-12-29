@@ -1,28 +1,45 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux'
+import { addTodo } from './actions'
 import './App.css';
+import TodoContainer from './todoContainer';
+import ShowTodo from './ShowTodo'
 
 class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      text: ""
+    }
+  }
+
+  handleChange = (e) => {
+    // const v = e.target.value;
+    e.persist()
+    this.setState(() => {
+      return {
+      text: e.target.value
+      }
+    })
+  }
   render() {
+    const { addTodo } = this.props
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Fragment>
+        <div>
+          <h1>ToD.O</h1>
+          <input type="text"  value={this.state.text} onChange={this.handleChange}/>
+          <button onClick={()=>addTodo(this.state.text)}>Add</button>
+        </div>
+        <TodoContainer />
+        <ShowTodo />
+      </Fragment>
     );
   }
 }
 
-export default App;
+const mapDispatchToProps = {
+  addTodo,
+}
+
+export default connect(null, mapDispatchToProps)(App);
